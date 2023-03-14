@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header/Header';
+import Form from './components/Form/Form';
+import { Grid } from '@mui/material';
+import { Box } from '@mui/system';
+
+const style = {
+  justifyContent: 'center',
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box className="App" sx={{ flexGrow: 1 }}>
+      <Grid container style={style}>
+        <Grid item xs={10}>
+          <Header />
+        </Grid>
+        <Grid item xs={10}>
+          <Form />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
