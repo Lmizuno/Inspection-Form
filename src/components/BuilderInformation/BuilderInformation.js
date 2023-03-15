@@ -33,7 +33,7 @@ const BuilderInformation = () => {
     <div className={styles.BuilderInformation}>
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="builderLicence"
         label="Vendor/Builder Licence #"
         onChange={handleBuilderLicenceChange}
@@ -41,7 +41,7 @@ const BuilderInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="builderName"
         label="Vendor/Builder name"
         onChange={handleBuilderNameChange}
@@ -49,7 +49,7 @@ const BuilderInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="representative"
         label="Representative"
         onChange={handleRepresentativeChange}

@@ -56,7 +56,7 @@ const HomeInformation = () => {
     <div className={styles.HomeInformation}>
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="lotNumber"
         label="Lot #"
         onChange={handlelotNumberChange}
@@ -64,7 +64,7 @@ const HomeInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="planCode"
         label="Plan Code"
         onChange={handleplanCodeChange}
@@ -72,7 +72,7 @@ const HomeInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="munincipality"
         label="Munincipality"
         onChange={handlemunincipalityChange}
@@ -80,7 +80,7 @@ const HomeInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="projectName"
         label="Condominium Project Name"
         onChange={handleprojectNameChange}
@@ -88,7 +88,7 @@ const HomeInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="level"
         label="Level"
         onChange={handlelevelChange}
@@ -96,7 +96,7 @@ const HomeInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="unit"
         label="Unit #"
         onChange={handleunitChange}
@@ -104,7 +104,7 @@ const HomeInformation = () => {
       />
       <TextField
         style={style}
-        fullWidth="true"
+        fullWidth
         id="address"
         label="Address"
         onChange={handleaddressChange}

@@ -13,10 +13,10 @@ function App() {
   return (
     <Box className="App" sx={{ flexGrow: 1 }}>
       <Grid container style={style}>
-        <Grid item xs={10}>
+        <Grid item xs={12} md={10}>
           <Header />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12} md={10}>
           <Form />
         </Grid>
       </Grid>

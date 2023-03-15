@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 
 const Header = () => (
   <div className={styles.Header}>
-    <Typography variant="h2" component="h1">
+    <Typography variant="h3" component="h1" align="center" gutterBottom={true}>
       Inspection Form
     </Typography>
   </div>

@@ -1,3 +1,15 @@
 .DynamicTable {
     margin-top: 10px;
 }
+
+.ModalBox{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    background-color: white;
+    box-shadow: 0px 10px 29px 0px #2a2a2a;
+    padding: 14px;
+    border-radius: 4px;
+}

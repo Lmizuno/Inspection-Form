@@ -38,7 +38,6 @@ const Form = () => {
         <Grid item>
           <LocalizationProvider dateAdapter={AdapterDayjs} >
             <DatePicker
-
               label="Date of possession"
               value={date}
               onChange={(newValue) => setDate(newValue)}

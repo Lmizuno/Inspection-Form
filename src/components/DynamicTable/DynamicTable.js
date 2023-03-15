@@ -16,30 +16,22 @@ import TextField from '@mui/material/TextField';
 import { Collapse, Grid, IconButton } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import CameraComponent from '../CameraComponent/CameraComponent';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
+
 
 function createData(itemNumber, location, description, image) {
   return { itemNumber, location, description, image };
 }
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-};
-
 function Row(props) {
-  const { row } = props;
+  const { row, handleUpdateClick, handleDeleteClick } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableRow className='rowStyle' itemnumber={row.itemNumber}>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -49,20 +41,54 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" align='center' width="10%">
           {row.itemNumber}
         </TableCell>
-        <TableCell align="right">{row.location}</TableCell>
+        <TableCell>{row.location}</TableCell>
       </TableRow>
-      <TableRow>
+      <TableRow className='rowStyle'>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Detail
-              </Typography>
-              {/** TODO: Save Image as code and put it here */}
-              <img src={row.image}/>
+              <Grid container spacing={2}
+                justifyContent="space-evenly"
+                alignItems="center"
+                display="flex"
+              >
+                <Grid item xs={6}>
+                  <Typography variant="h6" component="p">
+                    Description
+                  </Typography>
+                  <Typography
+                    variant="p" component="p"
+                  >
+                    {row.description}
+                  </Typography>
+                  <Button
+                    aria-label="Update" 
+                    itemnumber={row.itemNumber}
+                    variant="outlined"
+                    onClick={(event) => {handleUpdateClick(event)}}
+                  >
+                    Update
+                  </Button>
+                  <IconButton 
+                    aria-label="delete" 
+                    size="large"
+                    itemnumber={row.itemNumber}
+                    onClick={(event) => {handleDeleteClick(event)}}
+                    color="error"
+                  >
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={6} justifyContent="space-evenly"
+                  alignItems="center"
+                  display="flex">
+                  <img style={{ width: "100%", borderRadius: 4 }} src={row.image} />
+                </Grid>
+              </Grid>
+
             </Box>
           </Collapse>
         </TableCell>
@@ -72,118 +98,121 @@ function Row(props) {
 }
 
 Row.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
+  row: PropTypes.shape
+    (
+      {
+        itemNumber: PropTypes.number.isRequired,
+        location: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired
+      }
+    )
 };
 
 const DynamicTable = () => {
   const [isUpdate, setIsUpate] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [itemNumber, setItemNumber] = React.useState(null);
+  const [location, setLocation] = React.useState('');
+  const [image, setImage] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [rows, setRows] = React.useState([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
   const handleClose = () => setOpen(false);
-  const handleOpen = (e) => {
-    if(e.currentTarget?.attributes?.itemnumber?.value)
-    {
+  const handleOpen = e => {
+    if (e.currentTarget?.attributes?.itemnumber?.value) {
       let item = getItem(e.currentTarget.attributes.itemnumber.value);
       setItemNumber(item.itemNumber);
       setLocation(item.location);
       setDescription(item.description);
       setIsUpate(true);
-    }else{
+    } else {
       setIsUpate(false);
     }
-    
+
     setOpen(true);
   };
-  const [rows, setRows] = React.useState([]);
-  const  handleModalClick = () => {
-    if(location === null || description === null){
+  const handleDelete = e => {
+    
+    if (e.currentTarget?.attributes?.itemnumber?.value) {
+      let item = getItem(e.currentTarget.attributes.itemnumber.value);
+     
+      setItemNumber(item.itemNumber);
+      setOpenDeleteDialog(true);
+    }
+  }
+
+  const handleModalClick = () => {
+    if (location === null || description === null) {
       return;
     }
 
-    if(isUpdate){
+    if (isUpdate) {
       console.log('UPDATING');
-      rows[itemNumber - 1] = createData(itemNumber, location, description, null); 
+      rows[itemNumber - 1] = createData(itemNumber, location, description, image);
       setRows(rows);
-    }else{
+    } else {
       console.log('ADDING NEW');
       console.log(rows);
-      let newNumber =  rows.length;
-      rows[newNumber] = createData(newNumber + 1, location, description, null);
+      let newNumber = rows.length;
+      rows[newNumber] = createData(newNumber + 1, location, description, image);
       setRows(rows);
     }
 
     setLocation('');
     setDescription('');
     setItemNumber(0);
+    setImage('');
     handleClose();
   }
-
-  const [itemNumber, setItemNumber] = React.useState(null);
-  const [location, setLocation] = React.useState('');  
-  const handleLocationChange = e => {  
+  const handleLocationChange = e => {
     setLocation(e.target.value);
   };
-  const [description, setDescription] = React.useState('');
-  const handleDescriptionChange = e => {  
+  const handleDescriptionChange = e => {
     setDescription(e.target.value);
   };
-
-  const getItem = (key) =>{
+  const handleTakePhoto = dataUri => {
+    setImage(dataUri);
+  }
+  const getItem = key => {
     return rows.find(e => e.itemNumber == key);
   }
+  const deleteItem = key => {
+    setRows(rows.filter(e => e.itemNumber !== key));
+  }
 
+  
   return (
     <div className={styles.DynamicTable}>
-      <Typography>
+      <Typography component={'h2'} variant={'h6'} align="center" gutterBottom={true}>
         Add Damage, Incomplete or Missing Items.
       </Typography>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="missing or damaged table">
+        <Table aria-label="missing or damaged table">
           <TableHead>
             <TableRow>
-              <TableCell />
-              <TableCell>Item#</TableCell>
-              <TableCell align="right">Room/Location</TableCell>
+              <TableCell width="10%" />
+              <TableCell align='center' width="10%">Item#</TableCell>
+              <TableCell>Room/Location</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {/**https://mui.com/material-ui/react-table/#collapsible-table */}
+          <TableBody>            
             {rows.map((row) => (
-              <TableRow
-                key={row.itemNumber}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                itemnumber={row.itemNumber}
-                onClick={handleOpen}
-              >
-                <TableCell>{row.itemNumber}</TableCell>
-                <TableCell align="right">{row.location}</TableCell>
-              </TableRow>
+              <Row key={row.itemNumber} row={row} handleUpdateClick={handleOpen} handleDeleteClick={handleDelete} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Button sx={{ marginTop: 1, align: "right"}} onClick={handleOpen} variant="contained">New Entry</Button>
+      <Button sx={{ marginTop: 1, align: "right" }} onClick={handleOpen} variant="contained">New Entry</Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box className={styles.ModalBox}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {isUpdate ? 'Update Item' : 'New Item'}
           </Typography>
@@ -191,7 +220,7 @@ const DynamicTable = () => {
             <Grid item xs={12} >
               <TextField
                 required
-                fullWidth
+                
                 id="locationOfMistake"
                 label="Location/Room"
                 autoFocus
@@ -212,7 +241,7 @@ const DynamicTable = () => {
               />
             </Grid>
             <Grid item xs={12} >
-              
+              <CameraComponent onPhotoSaved={handleTakePhoto} />
             </Grid>
           </Grid>
           <Button
@@ -222,10 +251,14 @@ const DynamicTable = () => {
             sx={{ mt: 3, mb: 2 }}
             onClick={handleModalClick}
           >
-            {isUpdate ? 'Update' : 'Add'}
+            Add
           </Button>
         </Box>
       </Modal>
+
+      <ConfirmDeleteDialog openDialog={openDeleteDialog} confirmationCallback={() => {deleteItem(itemNumber); setItemNumber(0); setOpenDeleteDialog(false);}} cancelCallBack={()=>{setOpenDeleteDialog(false);}}>
+        Delete item# {itemNumber}
+      </ConfirmDeleteDialog>
     </div>
   )
 };
