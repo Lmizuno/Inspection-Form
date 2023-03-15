@@ -20,12 +20,11 @@ import CameraComponent from '../CameraComponent/CameraComponent';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 
-
-function createData(itemNumber, location, description, image) {
+const createData = (itemNumber, location, description, image) => {
   return { itemNumber, location, description, image };
 }
 
-function Row(props) {
+const Row = (props) => {
   const { row, handleUpdateClick, handleDeleteClick } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -142,7 +141,6 @@ const DynamicTable = () => {
       setOpenDeleteDialog(true);
     }
   }
-
   const handleModalClick = () => {
     if (location === null || description === null) {
       return;
@@ -181,7 +179,6 @@ const DynamicTable = () => {
   const deleteItem = key => {
     setRows(rows.filter(e => e.itemNumber !== key));
   }
-
   
   return (
     <div className={styles.DynamicTable}>
@@ -204,7 +201,6 @@ const DynamicTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
       <Button sx={{ marginTop: 1, align: "right" }} onClick={handleOpen} variant="contained">New Entry</Button>
       <Modal
         open={open}
@@ -255,7 +251,6 @@ const DynamicTable = () => {
           </Button>
         </Box>
       </Modal>
-
       <ConfirmDeleteDialog openDialog={openDeleteDialog} confirmationCallback={() => {deleteItem(itemNumber); setItemNumber(0); setOpenDeleteDialog(false);}} cancelCallBack={()=>{setOpenDeleteDialog(false);}}>
         Delete item# {itemNumber}
       </ConfirmDeleteDialog>

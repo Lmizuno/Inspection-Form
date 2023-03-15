@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './Form.module.css';
 import DynamicTable from '../DynamicTable/DynamicTable';
 import { Grid, TextField, Typography } from '@mui/material';
 import BuilderInformation from '../BuilderInformation/BuilderInformation';
 import HomeInformation from '../HomeInformation/HomeInformation';
+import SignatureInformation from '../SignatureInformation/SignatureInformation';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -47,6 +47,7 @@ const Form = () => {
       </Grid>
       <BuilderInformation />
       <HomeInformation />
+      <SignatureInformation/>
     </div>
   )
 };

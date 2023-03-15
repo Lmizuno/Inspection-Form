@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0",
     "react-html5-camera-photo": "^1.5.11",
     "react-scripts": "5.0.1",
+    "react-signature-canvas": "^1.0.6",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
     "workbox-broadcast-update": "^6.5.4",
