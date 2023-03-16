@@ -1,13 +1,5 @@
-.SignatureComponent {}
-
 .sigCanvas {
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #ffffff;    
     
 }
-
-@media only screen and (max-width: 600px) {
-    .sigCanvas {
-      background-color: lightblue;
-    }
-  }

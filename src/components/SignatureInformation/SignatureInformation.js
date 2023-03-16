@@ -14,6 +14,11 @@ const SignatureInformation = () => {
   const [purchaserTwo, setPurchaserTwo] = React.useState('');
   const [designate, setDesignate] = React.useState('');
 
+
+  const onSignatureSave = (data) => {
+    
+  }
+
   return (
     <div className={styles.SignatureInformation}>
       <Typography gutterBottom >
@@ -29,7 +34,7 @@ const SignatureInformation = () => {
             onChange={(e) => { setPurchaserOne(e.target.value); }}
             value={purchaserOne}
           />
-          <SignatureComponent />
+          <SignatureComponent onSave={onSignatureSave}/>
         </Grid>
         <Grid item xs={12}>
           <TextField

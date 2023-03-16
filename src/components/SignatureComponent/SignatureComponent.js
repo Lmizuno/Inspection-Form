@@ -1,69 +1,91 @@
 import React from 'react';
 import styles from './SignatureComponent.module.css';
 import SignatureCanvas from 'react-signature-canvas'
-import { Box, Button, Grid, Modal } from '@mui/material';
+import { Button, Grid, Modal } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 const style = {
   position: 'absolute',
-  top: '60%',
+  top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
-  height: 'auto',
-  bgcolor: '#ccc',
+  width: '90%', 
+  height: '90%',
+  bgcolor: '#e3e3e3',
   borderRadius: 6,
   boxShadow: 24,
   p: 4,
 };
 
+const sigCanvas = {
+  margin: '0 auto',
+  backgroundColor: '#fff',
+  width: 100,
+  height: 100,
+}
+
 const SignatureComponent = (props) => {
-  const {onSave, widthRatio, canvasProps} = props;
+  const { onSave } = props;
   const [isSigned, setIsSigned] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
+  const [signature, setSignature] = React.useState(false);
+  const [canvasSize, setCanvasSizeObj] = React.useState({height: 110, width: 330});
 
-  const [signatureResult, setSignatureResult] = React.useState('')
   const sigCanvas = React.useRef({})
-  const sigPad = React.useRef({})
+  const canvasWrapper = React.useRef(null);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const buttonText = (isSigned) ? 'Change Signature' : 'Update Signature';
-
+  const buttonText = (isSigned) ? 'Update Signature' : 'Add Signature';
 
   const saveInput = () => {
-    const dataURL = sigCanvas.current.toDataURL()
-    setSignatureResult(dataURL)
-    onSave(dataURL)
-    setOpenModal(!openModal)
+    const dataURL = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+    //onSave(dataURL);
+    setOpenModal(false);
+    setIsSigned(true);
+    setSignature(dataURL);
   }
-  const clearInput = () => sigPad.current.clear()
 
-  const measuredRef = React.useCallback(node => {
-    const resizeCanvas = (signaturePad, canvas) => {
-      canvas.width = canvas.parentElement.clientWidth // width of the .canvasWrapper
-      canvas.height = canvas.parentElement.clientWidth / widthRatio
-      signaturePad.clear()
-    }
+  const clearInput = () => sigCanvas.current.clear()
 
-    if (node !== null) {
-      sigCanvas.current = node.getCanvas()
-      sigPad.current = node.getSignaturePad()
-      resizeCanvas(node.getSignaturePad(), node.getCanvas())
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setCanvasSize);
+
+    setCanvasSize();
+
+    return () => {
+      window.removeEventListener('resize', setCanvasSize);
+    };
+  }, []);
+
+  const setCanvasSize = () => {
+    if(canvasWrapper.current){
+      setCanvasSizeObj({height: canvasWrapper.current.offsetHeight, width: canvasWrapper.current.offsetWidth});
     }
-  }, [widthRatio])
+    if(sigCanvas.current){
+      sigCanvas.current.height = canvasSize.height;
+      sigCanvas.current.width = canvasSize.width;
+    }
+  };
+
 
   return (
     <div className={styles.SignatureComponent}>
-      <Button
-        aria-label="add signature"
-        size="large"
-        onClick={handleOpenModal}
-        startIcon={<AddIcon fontSize="inherit" />}
-      >
-        {buttonText}
-      </Button>
+      <Grid container flexDirection="column">
+        {(isSigned) && <Grid item><img src={signature} /> </Grid>}
+        <Grid item>
+          <Button
+            aria-label="add signature"
+            size="large"
+            onClick={handleOpenModal}
+            startIcon={<AddIcon fontSize="inherit" />}
+          >
+            {buttonText}
+          </Button>
+        </Grid>
+      </Grid>
       <Modal
         open={openModal}
         onClose={handleCloseModal}
@@ -77,18 +99,21 @@ const SignatureComponent = (props) => {
           justifyContent="space-between"
           container
         >
-          <Grid item sx={12}>
-            <SignatureCanvas canvasProps={{...canvasProps, className: styles.sigCanvas }} ref={measuredRef} />
+          <Grid item sx={12} ref={canvasWrapper}>
+            <SignatureCanvas canvasProps={{ className: styles.sigCanvas, height:canvasSize.height, width: canvasSize.width }} ref={sigCanvas} />
           </Grid>
-          <Grid item sx={12}>
+          <Grid item sx={12} >
             <Button
               variant="contained" aria-label="Save"
               onClick={saveInput}
             >
               Save
             </Button>
-            <Button variant="outlined" aria-label="Save" onClick={clearInput}>
+            <Button variant="outlined" aria-label="Clear" onClick={clearInput}>
               Clear
+            </Button>
+            <Button variant="outlined" color="error" aria-label="Cancel" onClick={handleCloseModal}>
+              Cancel
             </Button>
           </Grid>
         </Grid>
