@@ -1,5 +1,39 @@
 .sigCanvas {
     margin: 0 auto;
-    background-color: #ffffff;    
-    
+    background-color: #ffffff;
+    width: 200px;
+    aspect-ratio: 1/2;
 }
+
+.signatureButton {
+    transform: rotate(-90deg);
+    margin-top: 30px;
+    min-width: 85px;
+}
+
+.rotateSignature {
+    transform: rotate(90deg);
+}
+
+.signatureImage{
+    height: 200px;
+}
+
+@media (min-width: 650px) {
+    .sigCanvas {
+        width: 550px;
+        aspect-ratio: 2/1;
+    }
+
+    .signatureButton {
+        transform: rotate(0deg);
+    }
+}
+
+
+@media (min-width: 950px) {
+    .sigCanvas {
+        width: 750px;
+    }
+}
+

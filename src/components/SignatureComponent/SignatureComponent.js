@@ -9,12 +9,16 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '90%', 
+  width: '90%',
   height: '90%',
   bgcolor: '#e3e3e3',
   borderRadius: 6,
   boxShadow: 24,
   p: 4,
+  display: 'flex',
+  justifyContent: 'center',
+  alignContent: 'center',
+  flexDirection: 'column'
 };
 
 const sigCanvas = {
@@ -29,10 +33,9 @@ const SignatureComponent = (props) => {
   const [isSigned, setIsSigned] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [signature, setSignature] = React.useState(false);
-  const [canvasSize, setCanvasSizeObj] = React.useState({height: 110, width: 330});
+  const [imgClass, setImgClass] = React.useState('');
 
   const sigCanvas = React.useRef({})
-  const canvasWrapper = React.useRef(null);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -49,32 +52,18 @@ const SignatureComponent = (props) => {
 
   const clearInput = () => sigCanvas.current.clear()
 
-
   React.useEffect(() => {
-    window.addEventListener('resize', setCanvasSize);
-
-    setCanvasSize();
-
-    return () => {
-      window.removeEventListener('resize', setCanvasSize);
-    };
-  }, []);
-
-  const setCanvasSize = () => {
-    if(canvasWrapper.current){
-      setCanvasSizeObj({height: canvasWrapper.current.offsetHeight, width: canvasWrapper.current.offsetWidth});
+    if (window.innerWidth < 650) {
+      setImgClass(styles.rotateSignature);
+    } else {
+      setImgClass('');
     }
-    if(sigCanvas.current){
-      sigCanvas.current.height = canvasSize.height;
-      sigCanvas.current.width = canvasSize.width;
-    }
-  };
-
+  });
 
   return (
     <div className={styles.SignatureComponent}>
       <Grid container flexDirection="column">
-        {(isSigned) && <Grid item><img src={signature} /> </Grid>}
+        {(isSigned) && <Grid item justifyContent='space-around' alignItems='center' display='flex'><img className={`${styles.signatureImage} ${imgClass}`} src={signature} /></Grid>}
         <Grid item>
           <Button
             aria-label="add signature"
@@ -93,26 +82,35 @@ const SignatureComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Grid sx={style} id="innerSignatureModalBox"
-          display="flex"
-          flexDirection="column"
-          alignContent="space-between"
-          justifyContent="space-between"
+
           container
         >
-          <Grid item sx={12} ref={canvasWrapper}>
-            <SignatureCanvas canvasProps={{ className: styles.sigCanvas, height:canvasSize.height, width: canvasSize.width }} ref={sigCanvas} />
+          <Grid item sx={12} justifyContent='center' alignItems='center' display='flex'>
+            <SignatureCanvas canvasProps={{ className: styles.sigCanvas }} ref={sigCanvas} />
           </Grid>
-          <Grid item sx={12} >
+          <Grid item sx={12} justifyContent='space-around' alignItems='center' display='flex'>
             <Button
               variant="contained" aria-label="Save"
               onClick={saveInput}
+              className={styles.signatureButton}
             >
               Save
             </Button>
-            <Button variant="outlined" aria-label="Clear" onClick={clearInput}>
+            <Button
+              variant="outlined"
+              aria-label="Clear"
+              onClick={clearInput}
+              className={styles.signatureButton}
+            >
               Clear
             </Button>
-            <Button variant="outlined" color="error" aria-label="Cancel" onClick={handleCloseModal}>
+            <Button
+              variant="outlined"
+              color="error"
+              aria-label="Cancel"
+              onClick={handleCloseModal}
+              className={styles.signatureButton}
+            >
               Cancel
             </Button>
           </Grid>
