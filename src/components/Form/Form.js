@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Form.module.css';
 import DynamicTable from '../DynamicTable/DynamicTable';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import BuilderInformation from '../BuilderInformation/BuilderInformation';
 import HomeInformation from '../HomeInformation/HomeInformation';
 import SignatureInformation from '../SignatureInformation/SignatureInformation';
@@ -20,6 +20,10 @@ const Form = () => {
       ...state,
       unitEnrolment: e.target.value
     });
+  }
+
+  const makePDF = () => {
+    
   }
 
   return (
@@ -48,6 +52,9 @@ const Form = () => {
       <BuilderInformation />
       <HomeInformation />
       <SignatureInformation/>
+      <Button onClick={makePDF}>
+        Save and Print
+      </Button>
     </div>
   )
 };
