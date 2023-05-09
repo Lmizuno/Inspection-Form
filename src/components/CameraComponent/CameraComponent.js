@@ -9,7 +9,7 @@ import { Grid } from '@mui/material';
 const ImagePreview = ({ dataUri }) => {
   return (
     <div style={{ position: 'relative', textAlign: 'center' }}>
-      <img style={{ width: '100%' }} src={dataUri} />
+      <img style={{ height: '200px'}} src={dataUri} />
     </div>
   );
 };

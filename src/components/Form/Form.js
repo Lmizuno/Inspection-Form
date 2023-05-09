@@ -10,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { jsPDF } from "jspdf";
 
 const Form = () => {
   const [state, setState] = React.useState({});
@@ -22,13 +23,36 @@ const Form = () => {
     });
   }
 
+  const handleDynamicTableChange = (e) => {
+    setState({
+      ...state,
+      inspectedItems: e.target.value
+    });
+  }
+
   const makePDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(40);
+    doc.text("Pre-Delivery Inspection Form", 15, 25);
     
+    doc.setFontSize(20);
+    doc.text(date.toDate().toDateString(), 15, 35);
+    doc.text(`Unit: ${state.unitEnrolment}`, 100, 35);
+
+    doc.save(`PDIF-${"date"}.pdf`);
+
+    //console.log(date.toDate().toDateString());
+    //http://raw.githack.com/MrRio/jsPDF/master/index.html
+    //https://github.com/parallax/jsPDF 
   }
 
   return (
     <div className={styles.Form}>
-      <DynamicTable />
+      <DynamicTable 
+        value={state.inspectedItems} 
+        onChange={handleDynamicTableChange}
+      />
       <Typography style={{ marginBottom: "20px", marginTop: "50px" }} variant="h5" component="h2">Vendor/Builder and Home Address Information</Typography>
       <Grid container style={{ justifyContent: "center" }} spacing={2}>
         <Grid item>

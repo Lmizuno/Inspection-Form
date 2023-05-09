@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './SignatureComponent.module.css';
 import SignatureCanvas from 'react-signature-canvas'
-import { Button, Grid, Modal } from '@mui/material';
+import { Box, Button, Grid, Modal, Stack } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 const style = {
@@ -9,8 +9,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '90%',
-  height: '90%',
+  width: '100%',
+  height: '100%',
   bgcolor: '#e3e3e3',
   borderRadius: 6,
   boxShadow: 24,
@@ -21,15 +21,8 @@ const style = {
   flexDirection: 'column'
 };
 
-const sigCanvas = {
-  margin: '0 auto',
-  backgroundColor: '#fff',
-  width: 100,
-  height: 100,
-}
-
 const SignatureComponent = (props) => {
-  const { onSave } = props;
+  //const { onSave } = props;
   const [isSigned, setIsSigned] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [signature, setSignature] = React.useState(false);
@@ -58,12 +51,14 @@ const SignatureComponent = (props) => {
     } else {
       setImgClass('');
     }
-  });
+  }, []);
 
   return (
     <div className={styles.SignatureComponent}>
       <Grid container flexDirection="column">
-        {(isSigned) && <Grid item justifyContent='space-around' alignItems='center' display='flex'><img className={`${styles.signatureImage} ${imgClass}`} src={signature} /></Grid>}
+        {(isSigned) && <Grid item justifyContent='start' alignItems='start' display='flex'>
+          <img className={`${styles.signatureImage} ${imgClass}`} src={signature} alt='signature'/>
+          </Grid>}
         <Grid item>
           <Button
             aria-label="add signature"
@@ -81,18 +76,15 @@ const SignatureComponent = (props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Grid sx={style} id="innerSignatureModalBox"
-
-          container
-        >
-          <Grid item sx={12} justifyContent='center' alignItems='center' display='flex'>
+        <Stack sx={style} id="innerSignatureModalBox" direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems='center' display='flex'>
+          <Box item sx={12} md={9} justifyContent='center' alignItems='center' display='flex'>
             <SignatureCanvas canvasProps={{ className: styles.sigCanvas }} ref={sigCanvas} />
-          </Grid>
-          <Grid item sx={12} justifyContent='space-around' alignItems='center' display='flex'>
+          </Box>
+          <Stack sx={12} md={3} direction={{ xs: 'row', sm: 'column' }}>
             <Button
               variant="contained" aria-label="Save"
               onClick={saveInput}
-              className={styles.signatureButton}
+              className={styles.signatureButtons}
             >
               Save
             </Button>
@@ -100,7 +92,7 @@ const SignatureComponent = (props) => {
               variant="outlined"
               aria-label="Clear"
               onClick={clearInput}
-              className={styles.signatureButton}
+              className={styles.signatureButtons}
             >
               Clear
             </Button>
@@ -109,12 +101,12 @@ const SignatureComponent = (props) => {
               color="error"
               aria-label="Cancel"
               onClick={handleCloseModal}
-              className={styles.signatureButton}
+              className={styles.signatureButtons}
             >
               Cancel
             </Button>
-          </Grid>
-        </Grid>
+          </Stack>
+        </Stack>
       </Modal>
     </div>
   );
