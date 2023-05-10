@@ -5,19 +5,78 @@ import SignatureComponent from '../SignatureComponent/SignatureComponent';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+//import dayjs from 'dayjs';
 import { Grid, TextField, Typography } from '@mui/material';
 
-const SignatureInformation = () => {
-  const [date, setDate] = React.useState(dayjs());
-  const [purchaserOne, setPurchaserOne] = React.useState('');
-  const [purchaserTwo, setPurchaserTwo] = React.useState('');
-  const [designate, setDesignate] = React.useState('');
 
+const SignatureItem = (props) => {
+  const [state, updateState] = React.useState({});
+
+  const handleNameChange = (e) => {
+    setState({
+      ...state,
+      signatureName: e.target.value
+    });
+  }
 
   const onSignatureSave = (data) => {
-    
+    setState({
+      ...state,
+      signatureImage: data
+    });
   }
+
+  const setState = (e) => {
+    updateState(e);
+    props.onChange(state);
+  };
+
+  return (
+    <>
+      <TextField
+        fullWidth
+        id={props.NameId}
+        label={props.NameLabel}
+        onChange={handleNameChange}
+        value={state.signatureName}
+      />
+      <SignatureComponent onSave={onSignatureSave} />
+    </>
+  );
+}
+
+const SignatureInformation = (props) => {
+  const [state, updateState] = React.useState({});
+
+  const handleDateChange = (e) => {
+    setState({
+      ...state,
+      date: e.target.value
+    });
+  }
+  const handlePurchaserOneChange = (e) => {
+    setState({
+      ...state,
+      purchaserOne: e.target.value
+    });
+  }
+  const handlePurchaserTwoChange = (e) => {
+    setState({
+      ...state,
+      purchaserTwo: e.target.value
+    });
+  }
+  const handleDesignateChange = (e) => {
+    setState({
+      ...state,
+      designate: e.target.value
+    });
+  }
+
+  const setState = (e) => {
+    updateState(e);
+    props.onChange(state);
+  };
 
   return (
     <div className={styles.SignatureInformation}>
@@ -27,41 +86,32 @@ const SignatureInformation = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <TextField
-            fullWidth
-            id="purchaserOne"
-            label="Purchaser’s name"
-            onChange={(e) => { setPurchaserOne(e.target.value); }}
-            value={purchaserOne}
+          <SignatureItem
+            NameId="purchaserOne"
+            NameLabel="Purchaser’s name"
+            onChange={handlePurchaserOneChange}
           />
-          <SignatureComponent onSave={onSignatureSave}/>
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            fullWidth
-            id="purchaserTwo"
-            label="Purchaser’s name"
-            onChange={(e) => { setPurchaserTwo(e.target.value); }}
-            value={purchaserTwo}
+          <SignatureItem
+            NameId="purchaserTwo"
+            NameLabel="Purchaser’s name"
+            onChange={handlePurchaserTwoChange}
           />
-          <SignatureComponent />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            fullWidth
-            id="designate"
-            label="Designate’s name (Optional)"
-            onChange={(e) => { setDesignate(e.target.value); }}
-            value={designate}
+          <SignatureItem
+            NameId="designate"
+            NameLabel="Designate’s name (Optional)"
+            onChange={handleDesignateChange}
           />
-          <SignatureComponent />
         </Grid>
         <Grid item xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date of possession"
-              value={date}
-              onChange={(newValue) => setDate(newValue)}
+              value={state.date}
+              onChange={handleDateChange}
             />
           </LocalizationProvider>
         </Grid>

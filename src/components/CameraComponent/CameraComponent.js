@@ -42,10 +42,10 @@ const CameraComponent = ({ onPhotoSaved }) => {
     setIsCameraOpen(false);
   }
   const handleCameraStart = (stream) => {
-    console.log('handleCameraStart');
+    // console.log('handleCameraStart');
   }
   const handleCameraStop = () => {
-    console.log('handleCameraStop');
+    // console.log('handleCameraStop');
   }
   const handleCloseCamera = () => {
     setIsCameraOpen(false);

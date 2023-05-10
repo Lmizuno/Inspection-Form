@@ -26,25 +26,83 @@ const Form = () => {
   const handleDynamicTableChange = (e) => {
     setState({
       ...state,
-      inspectedItems: e.target.value
+      inspectedItems: e
     });
   }
 
+  const handleBuilderInformationChange = (e) => {
+    setState({
+      ...state,
+      builderInformation: e
+    });
+  }
+
+  const handlehomeInformationChange = (e) => {
+    setState({
+      ...state,
+      homeInformation: e
+    });
+  }
+
+  const handleSignatureInformationChange = (e) => {
+    setState({
+      ...state,
+      signatureInformation: e
+    });
+  }
+
+  const createHeaders = (keys) => {
+    var result = [];
+    for (var i = 0; i < keys.length; i += 1) {
+      result.push({
+        id: keys[i],
+        name: keys[i],
+        prompt: keys[i],
+        width: 65,
+        align: "center",
+        padding: 0
+      });
+    }
+    return result;
+  }
+
   const makePDF = () => {
-    const doc = new jsPDF();
 
-    doc.setFontSize(40);
-    doc.text("Pre-Delivery Inspection Form", 15, 25);
+    console.log(state);
+    // const doc = new jsPDF();
+
+    // doc.setFontSize(40);
+    // doc.text("Pre-Delivery Inspection Form", 15, 25);
     
-    doc.setFontSize(20);
-    doc.text(date.toDate().toDateString(), 15, 35);
-    doc.text(`Unit: ${state.unitEnrolment}`, 100, 35);
+    // doc.setFontSize(20);
+    // doc.text(date.toDate().toDateString(), 15, 35);
+    // doc.text(`Unit: ${state.unitEnrolment}`, 100, 35);
 
-    doc.save(`PDIF-${"date"}.pdf`);
 
-    //console.log(date.toDate().toDateString());
-    //http://raw.githack.com/MrRio/jsPDF/master/index.html
-    //https://github.com/parallax/jsPDF 
+    // // let count = 1;
+    // // state.inspectedItems.map( e => {
+
+    // //   if(e.image){
+    // //     doc.addImage(e.img, "JPEG", 15, (40 * count) + 180, 180, 180);
+    // //   }
+      
+    // // });
+    
+    // var headers = createHeaders([
+    //   "itemNumber",
+    //   "location",
+    //   "description",
+    //   "image"
+    // ]);
+
+    // doc.table(1, 1, state.inspectedItems, headers, { autoSize: true });
+
+    // //console.log(date.toDate().toDateString());
+    // //http://raw.githack.com/MrRio/jsPDF/master/index.html
+    // //https://github.com/parallax/jsPDF 
+
+    // //doc.autoPrint();
+    // doc.save(`PDIF-UNIT${state.unitEnrolment}-${"date"}.pdf`);
   }
 
   return (
@@ -73,9 +131,18 @@ const Form = () => {
           </LocalizationProvider>
         </Grid>
       </Grid>
-      <BuilderInformation />
-      <HomeInformation />
-      <SignatureInformation/>
+      <BuilderInformation 
+        value={state.builderInformation} 
+        onChange={handleBuilderInformationChange}
+      />
+      <HomeInformation 
+        value={state.homeInformation} 
+        onChange={handlehomeInformationChange}
+      />
+      <SignatureInformation
+        value={state.signatureInformation} 
+        onChange={handleSignatureInformationChange}
+      />
       <Button onClick={makePDF}>
         Save and Print
       </Button>

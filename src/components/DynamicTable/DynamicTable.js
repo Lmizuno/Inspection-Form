@@ -108,16 +108,20 @@ Row.propTypes = {
     )
 };
 
-const DynamicTable = () => {
+const DynamicTable = (props) => {
   const [isUpdate, setIsUpate] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [itemNumber, setItemNumber] = React.useState(null);
   const [location, setLocation] = React.useState('');
   const [image, setImage] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRowsData] = React.useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
+  const setRows = (data) => {
+    setRowsData(data);
+    props.onChange(data);
+  }
   const handleClose = () => setOpen(false);
   const handleOpen = e => {
     if (e.currentTarget?.attributes?.itemnumber?.value) {
@@ -147,12 +151,9 @@ const DynamicTable = () => {
     }
 
     if (isUpdate) {
-      console.log('UPDATING');
       rows[itemNumber - 1] = createData(itemNumber, location, description, image);
       setRows(rows);
     } else {
-      console.log('ADDING NEW');
-      console.log(rows);
       let newNumber = rows.length;
       rows[newNumber] = createData(newNumber + 1, location, description, image);
       setRows(rows);

@@ -7,8 +7,8 @@ const style = {
   marginTop: "1vh",
 }
 
-const BuilderInformation = () => {
-  const [state, setState] = React.useState({});
+const BuilderInformation = (props) => {
+  const [state, updateState] = React.useState({});
 
   const handleBuilderLicenceChange = (e) => {
     setState({
@@ -28,6 +28,10 @@ const BuilderInformation = () => {
       representative: e.target.value
     });
   }
+  const setState = (e) => {
+    updateState(e);
+    props.onChange(state);
+  };
 
   return (
     <div className={styles.BuilderInformation}>

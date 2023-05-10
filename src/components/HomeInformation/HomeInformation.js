@@ -6,8 +6,8 @@ import { TextField, Typography } from '@mui/material';
 const style = {
   marginTop: "1vh",
 }
-const HomeInformation = () => {
-  const [state, setState] = React.useState({});
+const HomeInformation = (props) => {
+  const [state, updateState] = React.useState({});
 
   const handlelotNumberChange = (e) => {
     setState({
@@ -51,6 +51,11 @@ const HomeInformation = () => {
       address: e.target.value
     });
   }
+
+  const setState = (e) => {
+    updateState(e);
+    props.onChange(state);
+  };
 
   return (
     <div className={styles.HomeInformation}>
