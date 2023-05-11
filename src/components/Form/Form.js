@@ -51,6 +51,13 @@ const Form = () => {
     });
   }
 
+  const handleDateChange = (e) => {
+    setState({
+      ...state,
+      possessionDate: e
+    });
+  }
+  
   const createHeaders = (keys) => {
     var result = [];
     for (var i = 0; i < keys.length; i += 1) {
@@ -125,8 +132,8 @@ const Form = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs} >
             <DatePicker
               label="Date of possession"
-              value={date}
-              onChange={(newValue) => setDate(newValue)}
+              value={state.date}
+              onChange={handleDateChange}
             />
           </LocalizationProvider>
         </Grid>

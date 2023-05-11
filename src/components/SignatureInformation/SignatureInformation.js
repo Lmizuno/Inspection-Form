@@ -20,6 +20,8 @@ const SignatureItem = (props) => {
   }
 
   const onSignatureSave = (data) => {
+
+    console.log(data);
     setState({
       ...state,
       signatureImage: data
@@ -28,7 +30,7 @@ const SignatureItem = (props) => {
 
   const setState = (e) => {
     updateState(e);
-    props.onChange(state);
+    props.onChange(e);
   };
 
   return (
@@ -51,31 +53,31 @@ const SignatureInformation = (props) => {
   const handleDateChange = (e) => {
     setState({
       ...state,
-      date: e.target.value
+      date: e
     });
   }
   const handlePurchaserOneChange = (e) => {
     setState({
       ...state,
-      purchaserOne: e.target.value
+      purchaserOne: e
     });
   }
   const handlePurchaserTwoChange = (e) => {
     setState({
       ...state,
-      purchaserTwo: e.target.value
+      purchaserTwo: e
     });
   }
   const handleDesignateChange = (e) => {
     setState({
       ...state,
-      designate: e.target.value
+      designate: e
     });
   }
 
   const setState = (e) => {
     updateState(e);
-    props.onChange(state);
+    props.onChange(e);
   };
 
   return (

@@ -22,7 +22,6 @@ const style = {
 };
 
 const SignatureComponent = (props) => {
-  const { onSave } = props;
   const [isSigned, setIsSigned] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [signature, setSignature] = React.useState(false);
@@ -37,9 +36,11 @@ const SignatureComponent = (props) => {
 
   const saveInput = () => {
     const dataURL = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
-    onSave(dataURL);
+    
     setOpenModal(false);
     setIsSigned(true);
+
+    props.onSave(dataURL);
     setSignature(dataURL);
   }
 

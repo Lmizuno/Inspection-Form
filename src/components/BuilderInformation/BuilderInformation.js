@@ -30,7 +30,7 @@ const BuilderInformation = (props) => {
   }
   const setState = (e) => {
     updateState(e);
-    props.onChange(state);
+    props.onChange(e);
   };
 
   return (
