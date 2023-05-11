@@ -76,6 +76,10 @@ const Form = () => {
   const makePDF = () => {
 
     console.log(state);
+
+    //what about we build a basic html page and use html2canvas to print it
+
+    
     // const doc = new jsPDF();
 
     // doc.setFontSize(40);

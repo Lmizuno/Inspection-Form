@@ -20,8 +20,7 @@ const SignatureItem = (props) => {
   }
 
   const onSignatureSave = (data) => {
-
-    console.log(data);
+    //console.log(data);
     setState({
       ...state,
       signatureImage: data
