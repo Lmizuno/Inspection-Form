@@ -78,10 +78,10 @@ const SignatureComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Stack sx={style} id="innerSignatureModalBox" direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems='center' display='flex'>
-          <Box item sx={12} md={9} justifyContent='center' alignItems='center' display='flex'>
+          <Box item xs={12} md={9} justifyContent='center' alignItems='center' display='flex'>
             <SignatureCanvas canvasProps={{ className: styles.sigCanvas }} ref={sigCanvas} />
           </Box>
-          <Stack sx={12} md={3} direction={{ xs: 'row', sm: 'column' }}>
+          <Stack xs={12} md={3} direction={{ xs: 'row', sm: 'column' }}>
             <Button
               variant="contained" aria-label="Save"
               onClick={saveInput}

@@ -19,6 +19,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CameraComponent from '../CameraComponent/CameraComponent';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateInspectedItems } from '../../store/slices/formSlice';
 
 const createData = (itemNumber, location, description, image) => {
   return { itemNumber, location, description, image };
@@ -108,20 +110,22 @@ Row.propTypes = {
     )
 };
 
-const DynamicTable = (props) => {
-  const [isUpdate, setIsUpate] = React.useState(false);
+const DynamicTable = () => {
+  const dispatch = useDispatch();
+  const inspectedItems = useSelector(state => state.form.inspectedItems);
+  
+  const [isUpdate, setIsUpdate] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [itemNumber, setItemNumber] = React.useState(null);
   const [location, setLocation] = React.useState('');
   const [image, setImage] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [rows, setRowsData] = React.useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
-  const setRows = (data) => {
-    setRowsData(data);
-    props.onChange(data);
+  const updateItems = (newItems) => {
+    dispatch(updateInspectedItems(newItems));
   }
+
   const handleClose = () => setOpen(false);
   const handleOpen = e => {
     if (e.currentTarget?.attributes?.itemnumber?.value) {
@@ -129,9 +133,9 @@ const DynamicTable = (props) => {
       setItemNumber(item.itemNumber);
       setLocation(item.location);
       setDescription(item.description);
-      setIsUpate(true);
+      setIsUpdate(true);
     } else {
-      setIsUpate(false);
+      setIsUpdate(false);
     }
 
     setOpen(true);
@@ -150,15 +154,15 @@ const DynamicTable = (props) => {
       return;
     }
 
+    let newItems = [...inspectedItems];
     if (isUpdate) {
-      rows[itemNumber - 1] = createData(itemNumber, location, description, image);
-      setRows(rows);
+      newItems[itemNumber - 1] = createData(itemNumber, location, description, image);
     } else {
-      let newNumber = rows.length;
-      rows[newNumber] = createData(newNumber + 1, location, description, image);
-      setRows(rows);
+      let newNumber = newItems.length;
+      newItems[newNumber] = createData(newNumber + 1, location, description, image);
     }
-
+    
+    updateItems(newItems);
     setLocation('');
     setDescription('');
     setItemNumber(0);
@@ -175,10 +179,10 @@ const DynamicTable = (props) => {
     setImage(dataUri);
   }
   const getItem = key => {
-    return rows.find(e => e.itemNumber == key);
+    return inspectedItems.find(e => e.itemNumber == key);
   }
   const deleteItem = key => {
-    setRows(rows.filter(e => e.itemNumber !== key));
+    updateItems(inspectedItems.filter(e => e.itemNumber !== key));
   }
   
   return (
@@ -196,7 +200,7 @@ const DynamicTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>            
-            {rows.map((row) => (
+            {inspectedItems.map((row) => (
               <Row key={row.itemNumber} row={row} handleUpdateClick={handleOpen} handleDeleteClick={handleDelete} />
             ))}
           </TableBody>

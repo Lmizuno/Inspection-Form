@@ -5,6 +5,8 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import BuilderInformation from '../BuilderInformation/BuilderInformation';
 import HomeInformation from '../HomeInformation/HomeInformation';
 import SignatureInformation from '../SignatureInformation/SignatureInformation';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUnitEnrolment, updatePossessionDate } from '../../store/slices/formSlice';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -13,69 +15,21 @@ import dayjs from 'dayjs';
 import { jsPDF } from "jspdf";
 
 const Form = () => {
-  const [state, setState] = React.useState({});
+  const dispatch = useDispatch();
+  const formState = useSelector(state => state.form);
   const [date, setDate] = React.useState(dayjs());
 
   const handleUnitEnrolmentChange = (e) => {
-    setState({
-      ...state,
-      unitEnrolment: e.target.value
-    });
-  }
-
-  const handleDynamicTableChange = (e) => {
-    setState({
-      ...state,
-      inspectedItems: e
-    });
-  }
-
-  const handleBuilderInformationChange = (e) => {
-    setState({
-      ...state,
-      builderInformation: e
-    });
-  }
-
-  const handlehomeInformationChange = (e) => {
-    setState({
-      ...state,
-      homeInformation: e
-    });
-  }
-
-  const handleSignatureInformationChange = (e) => {
-    setState({
-      ...state,
-      signatureInformation: e
-    });
+    dispatch(updateUnitEnrolment(e.target.value));
   }
 
   const handleDateChange = (e) => {
-    setState({
-      ...state,
-      possessionDate: e
-    });
-  }
-  
-  const createHeaders = (keys) => {
-    var result = [];
-    for (var i = 0; i < keys.length; i += 1) {
-      result.push({
-        id: keys[i],
-        name: keys[i],
-        prompt: keys[i],
-        width: 65,
-        align: "center",
-        padding: 0
-      });
-    }
-    return result;
+    dispatch(updatePossessionDate(e));
   }
 
   const makePDF = () => {
 
-    console.log(state);
+    console.log(formState);
 
     //what about we build a basic html page and use html2canvas to print it
 
@@ -118,51 +72,37 @@ const Form = () => {
 
   return (
     <div className={styles.Form}>
-      <DynamicTable 
-        value={state.inspectedItems} 
-        onChange={handleDynamicTableChange}
-      />
-      <Typography style={{ marginBottom: "20px", marginTop: "50px" }} variant="h5" component="h2">Vendor/Builder and Home Address Information</Typography>
+      <DynamicTable />
+      <Typography style={{ marginBottom: "20px", marginTop: "50px" }} variant="h5" component="h2">
+        Vendor/Builder and Home Address Information
+      </Typography>
       <Grid container style={{ justifyContent: "center" }} spacing={2}>
         <Grid item>
           <TextField
             id="unitEnrolment"
             label="Unit Enrolment #"
             onChange={handleUnitEnrolmentChange}
-            value={state.unitEnrolment}
+            value={formState.unitEnrolment}
           />
         </Grid>
         <Grid item>
-          <LocalizationProvider dateAdapter={AdapterDayjs} >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date of possession"
-              value={state.date}
+              value={formState.possessionDate}
               onChange={handleDateChange}
             />
           </LocalizationProvider>
         </Grid>
       </Grid>
-      <BuilderInformation 
-        value={state.builderInformation} 
-        onChange={handleBuilderInformationChange}
-      />
-      <HomeInformation 
-        value={state.homeInformation} 
-        onChange={handlehomeInformationChange}
-      />
-      <SignatureInformation
-        value={state.signatureInformation} 
-        onChange={handleSignatureInformationChange}
-      />
+      <BuilderInformation />
+      <HomeInformation />
+      <SignatureInformation />
       <Button onClick={makePDF}>
         Save and Print
       </Button>
     </div>
   )
 };
-
-Form.propTypes = {};
-
-Form.defaultProps = {};
 
 export default Form;

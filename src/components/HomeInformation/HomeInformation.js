@@ -2,59 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './HomeInformation.module.css';
 import { TextField, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateHomeInfo } from '../../store/slices/formSlice';
 
 const style = {
   marginTop: "1vh",
 }
-const HomeInformation = (props) => {
-  const [state, updateState] = React.useState({});
 
-  const handlelotNumberChange = (e) => {
-    setState({
-      ...state,
-      lotNumber: e.target.value
-    });
-  }
-  const handleplanCodeChange = (e) => {
-    setState({
-      ...state,
-      planCode: e.target.value
-    });
-  }
-  const handlemunincipalityChange = (e) => {
-    setState({
-      ...state,
-      munincipality: e.target.value
-    });
-  }
-  const handleprojectNameChange = (e) => {
-    setState({
-      ...state,
-      projectName: e.target.value
-    });
-  }
-  const handlelevelChange = (e) => {
-    setState({
-      ...state,
-      level: e.target.value
-    });
-  }
-  const handleunitChange = (e) => {
-    setState({
-      ...state,
-      unit: e.target.value
-    });
-  }
-  const handleaddressChange = (e) => {
-    setState({
-      ...state,
-      address: e.target.value
-    });
-  }
+const HomeInformation = () => {
+  const dispatch = useDispatch();
+  const homeInfo = useSelector(state => state.form.homeInfo);
 
-  const setState = (e) => {
-    updateState(e);
-    props.onChange(e);
+  const handleChange = (field) => (e) => {
+    dispatch(updateHomeInfo({
+      [field]: e.target.value
+    }));
   };
 
   return (
@@ -64,56 +26,56 @@ const HomeInformation = (props) => {
         fullWidth
         id="lotNumber"
         label="Lot #"
-        onChange={handlelotNumberChange}
-        value={state.lotNumber}
+        onChange={handleChange('lotNumber')}
+        value={homeInfo.lotNumber}
       />
       <TextField
         style={style}
         fullWidth
         id="planCode"
         label="Plan Code"
-        onChange={handleplanCodeChange}
-        value={state.planCode}
+        onChange={handleChange('planCode')}
+        value={homeInfo.planCode}
       />
       <TextField
         style={style}
         fullWidth
         id="munincipality"
         label="Munincipality"
-        onChange={handlemunincipalityChange}
-        value={state.munincipality}
+        onChange={handleChange('munincipality')}
+        value={homeInfo.munincipality}
       />
       <TextField
         style={style}
         fullWidth
         id="projectName"
         label="Condominium Project Name"
-        onChange={handleprojectNameChange}
-        value={state.projectName}
+        onChange={handleChange('projectName')}
+        value={homeInfo.projectName}
       />
       <TextField
         style={style}
         fullWidth
         id="level"
         label="Level"
-        onChange={handlelevelChange}
-        value={state.level}
+        onChange={handleChange('level')}
+        value={homeInfo.level}
       />
       <TextField
         style={style}
         fullWidth
         id="unit"
         label="Unit #"
-        onChange={handleunitChange}
-        value={state.unit}
+        onChange={handleChange('unit')}
+        value={homeInfo.unit}
       />
       <TextField
         style={style}
         fullWidth
         id="address"
         label="Address"
-        onChange={handleaddressChange}
-        value={state.address}
+        onChange={handleChange('address')}
+        value={homeInfo.address}
       />
     </div>
   );
