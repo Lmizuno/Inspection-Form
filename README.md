@@ -10,5 +10,6 @@
 
 ```bash
 docker build -t inspection-form .
-docker run -p 3000:3000 inspection-form
+
+docker run -p 3000:3000 --name inspection-app -v "$(pwd):/app" -v /app/node_modules inspection-form
 ```
