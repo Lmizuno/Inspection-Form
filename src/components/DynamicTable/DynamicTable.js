@@ -22,9 +22,10 @@ import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateInspectedItems } from '../../store/slices/formSlice';
 
-const createData = (itemNumber, location, description, image) => {
-  return { itemNumber, location, description, image };
-}
+// Update the createData function in DynamicTable
+const createData = (itemNumber, location, description, image, imageWidth, imageHeight) => {
+  return { itemNumber, location, description, image, imageWidth, imageHeight };
+} 
 
 const Row = (props) => {
   const { row, handleUpdateClick, handleDeleteClick } = props;
@@ -156,10 +157,24 @@ const DynamicTable = () => {
 
     let newItems = [...inspectedItems];
     if (isUpdate) {
-      newItems[itemNumber - 1] = createData(itemNumber, location, description, image);
+      newItems[itemNumber - 1] = createData(
+        itemNumber, 
+        location, 
+        description, 
+        image.uri,
+        image.width,
+        image.height
+      );
     } else {
       let newNumber = newItems.length;
-      newItems[newNumber] = createData(newNumber + 1, location, description, image);
+      newItems[newNumber] = createData(
+        newNumber + 1, 
+        location, 
+        description, 
+        image.uri,
+        image.width,
+        image.height
+      );
     }
     
     updateItems(newItems);
@@ -175,8 +190,12 @@ const DynamicTable = () => {
   const handleDescriptionChange = e => {
     setDescription(e.target.value);
   };
-  const handleTakePhoto = dataUri => {
-    setImage(dataUri);
+  const handleTakePhoto = (dataUri, width, height) => {
+    setImage({
+      uri: dataUri,
+      width: width,
+      height: height
+    });
   }
   const getItem = key => {
     return inspectedItems.find(e => e.itemNumber == key);
