@@ -9,10 +9,6 @@
     margin: 5px;
 }
 
-.rotateSignature {
-    transform: rotate(90deg);
-}
-
 .signatureImage {
     height: 200px;
     margin: 10px;

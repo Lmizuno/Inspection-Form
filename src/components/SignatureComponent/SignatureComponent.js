@@ -35,7 +35,27 @@ const SignatureComponent = (props) => {
   const buttonText = (isSigned) ? 'Update Signature' : 'Add Signature';
 
   const saveInput = () => {
-    const dataURL = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+    const canvas = sigCanvas.current.getTrimmedCanvas();
+    let dataURL;
+    
+    // Rotate signature image 90 degrees if on mobile
+    if (window.innerWidth < 650) {
+      // Create a new canvas for the rotated image
+      const rotatedCanvas = document.createElement('canvas');
+      rotatedCanvas.width = canvas.height;
+      rotatedCanvas.height = canvas.width;
+      
+      const ctx = rotatedCanvas.getContext('2d');
+      
+      // Translate and rotate the context
+      ctx.translate(rotatedCanvas.width/2, rotatedCanvas.height/2);
+      ctx.rotate(90 * Math.PI / 180);
+      ctx.drawImage(canvas, -canvas.width/2, -canvas.height/2);
+      
+      dataURL = rotatedCanvas.toDataURL('image/png');
+    } else {
+      dataURL = canvas.toDataURL('image/png');
+    }
     
     setOpenModal(false);
     setIsSigned(true);
@@ -45,14 +65,6 @@ const SignatureComponent = (props) => {
   }
 
   const clearInput = () => sigCanvas.current.clear()
-
-  React.useEffect(() => {
-    if (window.innerWidth < 650) {
-      setImgClass(styles.rotateSignature);
-    } else {
-      setImgClass('');
-    }
-  }, []);
 
   return (
     <div className={styles.SignatureComponent}>
