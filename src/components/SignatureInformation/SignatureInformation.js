@@ -1,117 +1,92 @@
 import React from 'react';
 import styles from './SignatureInformation.module.css';
 import SignatureComponent from '../SignatureComponent/SignatureComponent';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Grid, TextField, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateSignatures } from '../../store/slices/formSlice';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-//import dayjs from 'dayjs';
-import { Grid, TextField, Typography } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-
-const SignatureItem = (props) => {
-  const [state, updateState] = React.useState({});
-
+const SignatureItem = ({ id, label, value, onChange }) => {
   const handleNameChange = (e) => {
-    setState({
-      ...state,
+    onChange(id, {
       signatureName: e.target.value
     });
   }
 
   const onSignatureSave = (data) => {
-    //console.log(data);
-    setState({
-      ...state,
+    onChange(id, {
       signatureImage: data
     });
   }
-
-  const setState = (e) => {
-    updateState(e);
-    props.onChange(e);
-  };
 
   return (
     <>
       <TextField
         fullWidth
-        id={props.NameId}
-        label={props.NameLabel}
+        id={id}
+        label={label}
         onChange={handleNameChange}
-        value={state.signatureName}
+        value={value?.signatureName || ''}
       />
       <SignatureComponent onSave={onSignatureSave} />
     </>
   );
 }
 
-const SignatureInformation = (props) => {
-  const [state, updateState] = React.useState({});
+const SignatureInformation = () => {
+  const dispatch = useDispatch();
+  const signatures = useSelector(state => state.form.signatures);
 
-  const handleDateChange = (e) => {
-    setState({
-      ...state,
-      date: e
-    });
-  }
-  const handlePurchaserOneChange = (e) => {
-    setState({
-      ...state,
-      purchaserOne: e
-    });
-  }
-  const handlePurchaserTwoChange = (e) => {
-    setState({
-      ...state,
-      purchaserTwo: e
-    });
-  }
-  const handleDesignateChange = (e) => {
-    setState({
-      ...state,
-      designate: e
-    });
+  const handleSignatureChange = (id, data) => {
+    dispatch(updateSignatures({
+      [id]: { ...signatures[id], ...data }
+    }));
   }
 
-  const setState = (e) => {
-    updateState(e);
-    props.onChange(e);
-  };
+  const handleDateChange = (date) => {
+    dispatch(updateSignatures({
+      date
+    }));
+  }
 
   return (
     <div className={styles.SignatureInformation}>
-      <Typography gutterBottom >
+      <Typography gutterBottom>
         Signatures
       </Typography>
 
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <SignatureItem
-            NameId="purchaserOne"
-            NameLabel="Purchaser’s name"
-            onChange={handlePurchaserOneChange}
+            id="purchaserOne"
+            label="Purchaser's name"
+            value={signatures.purchaserOne}
+            onChange={handleSignatureChange}
           />
         </Grid>
         <Grid item xs={12}>
           <SignatureItem
-            NameId="purchaserTwo"
-            NameLabel="Purchaser’s name"
-            onChange={handlePurchaserTwoChange}
+            id="purchaserTwo"
+            label="Purchaser's name"
+            value={signatures.purchaserTwo}
+            onChange={handleSignatureChange}
           />
         </Grid>
         <Grid item xs={12}>
           <SignatureItem
-            NameId="designate"
-            NameLabel="Designate’s name (Optional)"
-            onChange={handleDesignateChange}
+            id="designate"
+            label="Designate's name (Optional)"
+            value={signatures.designate}
+            onChange={handleSignatureChange}
           />
         </Grid>
         <Grid item xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date of possession"
-              value={state.date}
+              value={signatures.date}
               onChange={handleDateChange}
             />
           </LocalizationProvider>

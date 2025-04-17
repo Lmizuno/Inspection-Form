@@ -38,8 +38,14 @@ const CameraComponent = ({ onPhotoSaved }) => {
     setIsCameraOpen(true);
   }
   const handleSavePhoto = () => {
-    onPhotoSaved(dataUri);
-    setIsCameraOpen(false);
+    if (dataUri) {
+      const img = new Image();
+      img.onload = () => {
+        onPhotoSaved(dataUri, img.width, img.height);
+        handleCloseCamera();
+      };
+      img.src = dataUri;
+    }
   }
   const handleCameraStart = (stream) => {
     // console.log('handleCameraStart');
